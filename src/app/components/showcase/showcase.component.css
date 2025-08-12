@@ -1,0 +1,20 @@
+.showcase-bg {
+    /* Background image URL */
+    background-image: url('/assets/Showcase-Radio-Balu-1.jpg'); /* Replace with your image URL */
+    background-size: cover;      /* Make sure the image covers the whole container */
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat;
+    min-height: 80vh;            /* Takes most of the viewport height */
+    color: white;                /* Make text readable on image */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .showcase-bg .container {
+    /* Optional: add a slight background overlay for better text readability */
+    background-color: rgba(26, 1, 1, 0.6);
+    padding: 2rem;
+    border-radius: 0.5rem;
+  }

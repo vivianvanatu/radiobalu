@@ -1,0 +1,53 @@
+<div *ngIf="streamData; else loading;"> 
+  <div class="row g-0 mb-3 align-items-center player-container">
+    <!-- Cover Art -->
+    <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
+      <img [src]="streamData.coverart" alt="Cover Art" class="cover-art" />
+    </div>
+
+    <!-- Play Button -->
+    <div class="col-12 col-md-1 d-flex justify-content-center mb-3 mb-md-0">
+      <button class="play-btn" (click)="togglePlay(audioPlayer)">
+        <i class="bi" [ngClass]="isPlaying ? 'bi-pause-fill' : 'bi-play-fill'"></i>
+      </button>
+    </div>
+
+    <!-- Title + Volume -->
+    <div class="col-12 col-md-4 text-center text-md-start pe-md-3">
+      <h5 class="title">{{ streamData.nowplaying }}</h5>
+      <audio #audioPlayer [src]="streamUrl" type="audio/aac"></audio>
+
+      <input
+        type="range"
+        min="0"
+        max="1"
+        step="0.01"
+        [value]="volume"
+        (input)="changeVolume(audioPlayer, $event)"
+        class="volume-slider"
+      />
+    </div>
+
+    <!-- Track History -->
+    <div class="col-12 col-md-5 ps-md-3">
+      <ul class="track-history mt-4">
+        <li *ngFor="let track of streamData.trackhistory; let i = index" class="track-item">
+          <img
+            *ngIf="streamData.covers && streamData.covers[i]"
+            [src]="streamData.covers[i]"
+            alt="Cover for {{ track }}"
+            class="track-cover"
+          />
+          <span class="track-name">{{ track }}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+  <div class="row">
+    {{ streamData.connections }} listeners
+  </div>
+</div>
+
+<ng-template #loading>
+  <p class="loading-text">Loading stream data...</p>
+</ng-template>

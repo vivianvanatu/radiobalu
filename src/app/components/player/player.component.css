@@ -1,0 +1,71 @@
+.player-container {
+  padding: 10px;
+}
+
+.cover-art {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+.play-btn {
+  background-color: #28a745;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 2.5rem;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.play-btn:hover {
+  background-color: #218838;
+}
+
+.volume-slider {
+  width: 100%;
+  max-width: 200px;
+  margin-top: 10px;
+}
+
+.track-history {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.track-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.track-cover {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.track-name {
+  color: white;
+}
+
+/* Mobile adjustments */
+@media (max-width: 767.98px) {
+  .player-container {
+    text-align: center;
+  }
+  
+  .volume-slider {
+    max-width: 100%;
+  }
+
+  .track-history {
+    margin-top: 10px;
+  }
+}
