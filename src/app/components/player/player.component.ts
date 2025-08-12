@@ -2,6 +2,7 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { StreamService } from '../../services/stream.service';
 import { CommonModule, JsonPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
+import { interval, Subscription, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-player',
@@ -17,6 +18,7 @@ export class PlayerComponent implements OnInit {
   streamData: any;
   isPlaying = false;
   volume = 1;
+  private sub!: Subscription;
 
   constructor(private renderer: Renderer2, private streamService: StreamService) {}
 
@@ -27,13 +29,15 @@ export class PlayerComponent implements OnInit {
     script.defer = true;
     this.renderer.appendChild(document.body, script);
 
-    this.streamService.getStreamData().subscribe({
-      next: (data) => {
-        this.streamData = data;
-        console.log('Stream data:', data);
-      },
-      error: (err) => console.error('Error loading stream data:', err),
-    });
+    this.sub = interval(5000)
+      .pipe(switchMap(() => this.streamService.getStreamData()))
+      .subscribe({
+        next: (data) => {
+          this.streamData = data;
+          console.log('Stream data updated:', data);
+        },
+        error: (err) => console.error('Error loading stream data:', err),
+      });
   }
 
   togglePlay(audio: HTMLAudioElement) {

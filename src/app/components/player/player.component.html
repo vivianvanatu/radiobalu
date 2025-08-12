@@ -13,7 +13,7 @@
     </div>
 
     <!-- Title + Volume -->
-    <div class="col-12 col-md-4 text-center text-md-start pe-md-3">
+    <div class="col-12 col-md-4 col-lg-5 text-center text-md-start pe-md-3">
       <h5 class="title">{{ streamData.nowplaying }}</h5>
       <audio #audioPlayer [src]="streamUrl" type="audio/aac"></audio>
 
@@ -29,7 +29,7 @@
     </div>
 
     <!-- Track History -->
-    <div class="col-12 col-md-5 ps-md-3">
+    <div class="col-12 col-md-5 col-lg-4 ps-md-3">
       <ul class="track-history mt-4">
         <li *ngFor="let track of streamData.trackhistory; let i = index" class="track-item">
           <img
@@ -43,8 +43,8 @@
       </ul>
     </div>
   </div>
-  <div class="row">
-    {{ streamData.connections }} listeners
+  <div class="row g-0 ps-md-5">
+    {{ streamData.connections }} {{ streamData.connections > 1 ? 'listeners' : 'listener' }}
   </div>
 </div>
 
