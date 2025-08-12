@@ -1,6 +1,6 @@
 .showcase-bg {
     /* Background image URL */
-    background-image: url('/assets/Showcase-Radio-Balu-1.jpg'); /* Replace with your image URL */
+    background-image: url('assets/Showcase-Radio-Balu-1.jpg'); /* Replace with your image URL */
     background-size: cover;      /* Make sure the image covers the whole container */
     background-position: center; /* Center the image */
     background-repeat: no-repeat;
