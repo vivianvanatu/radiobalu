@@ -1,0 +1,20 @@
+.card-img-top {
+  height: 225px;
+  object-fit: cover;
+  object-position: top;
+}
+
+.card img {
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
+}
+
+.carousel img {
+  object-fit: contain;
+  max-height: 80vh;
+}
