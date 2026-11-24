@@ -2,7 +2,7 @@
   <div class="row g-0 mb-3 align-items-center player-container">
     <!-- Cover Art -->
     <div class="col-12 col-md-2 text-center mb-3 mb-md-0">
-      <img [src]="streamData.coverart" alt="Cover Art" class="cover-art" />
+      <img [src]="streamData.cover" (error)="useFallbackCover($event)" alt="Cover art or Radio Balu logo" class="cover-art" />
     </div>
 
     <!-- Play Button -->
@@ -14,8 +14,8 @@
 
     <!-- Title + Volume -->
     <div class="col-12 col-md-4 col-lg-5 text-center text-md-start pe-md-3">
-      <h5 class="title">{{ streamData.nowplaying }}</h5>
-      <audio #audioPlayer [src]="streamUrl" type="audio/aac"></audio>
+      <h5 class="title">{{ streamData.title }}</h5>
+      <audio #audioPlayer [src]="streamUrl" (play)="isPlaying = true" (pause)="isPlaying = false" (error)="isPlaying = false"></audio>
 
       <input
         type="range"
@@ -31,20 +31,21 @@
     <!-- Track History -->
     <div class="col-12 col-md-5 col-lg-4 ps-md-3">
       <ul class="track-history mt-4">
-        <li *ngFor="let track of streamData.trackhistory; let i = index" class="track-item">
+        <li *ngFor="let track of streamData.history" class="track-item">
           <img
-            *ngIf="streamData.covers && streamData.covers[i]"
-            [src]="streamData.covers[i]"
-            alt="Cover for {{ track }}"
+            *ngIf="track.cover"
+            [src]="track.cover"
+            (error)="useFallbackCover($event)"
+            alt="Cover for {{ track.title }}"
             class="track-cover"
           />
-          <span class="track-name">{{ track }}</span>
+          <span class="track-name">{{ track.title }}</span>
         </li>
       </ul>
     </div>
   </div>
   <div class="row g-0 ps-md-5">
-    {{ streamData.connections }} {{ streamData.connections > 1 ? 'listeners' : 'listener' }}
+    {{ streamData.listeners }} {{ streamData.listeners === 1 ? 'listener' : 'listeners' }}
   </div>
 </div>
 

@@ -1,50 +1,63 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
-import { StreamService } from '../../services/stream.service';
-import { CommonModule, JsonPipe } from '@angular/common';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { DEFAULT_COVER, DEFAULT_STREAM, StreamData, StreamService } from '../../services/stream.service';
+import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { interval, Subscription, switchMap } from 'rxjs';
+import { catchError, EMPTY, Subscription, switchMap, timer } from 'rxjs';
 
 @Component({
   selector: 'app-player',
   standalone: true,
-  imports: [JsonPipe, HttpClientModule, CommonModule],
+  imports: [HttpClientModule, CommonModule],
   providers: [StreamService],
   templateUrl: './player.component.html',
   styleUrl: './player.component.css'
 })
-export class PlayerComponent implements OnInit {
+export class PlayerComponent implements OnInit, OnDestroy {
 
-  streamUrl = 'https://media2.streambrothers.com:2020/stream/8016';
-  streamData: any;
+  streamUrl = DEFAULT_STREAM;
+  streamData?: StreamData;
   isPlaying = false;
   volume = 1;
   private sub!: Subscription;
 
-  constructor(private renderer: Renderer2, private streamService: StreamService) {}
+  constructor(private streamService: StreamService) {}
 
   ngOnInit(): void {
-    const script = this.renderer.createElement('script');
-    script.type = 'text/javascript';
-    script.src = 'https://media2.streambrothers.com:2020/dist/widgets.js';
-    script.defer = true;
-    this.renderer.appendChild(document.body, script);
-
-    this.sub = interval(5000)
-      .pipe(switchMap(() => this.streamService.getStreamData()))
+    this.sub = timer(0, 5000)
+      .pipe(switchMap(() => this.streamService.getStreamData().pipe(
+        catchError(err => {
+          console.error('Error loading stream data:', err);
+          return EMPTY;
+        })
+      )))
       .subscribe({
         next: (data) => {
           this.streamData = data;
-          console.log('Stream data updated:', data);
+          this.streamUrl = data.listenUrl;
         },
         error: (err) => console.error('Error loading stream data:', err),
       });
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
+  }
+
+  useFallbackCover(event: Event): void {
+    const image = event.target as HTMLImageElement;
+    if (!image.src.endsWith(DEFAULT_COVER)) {
+      image.src = DEFAULT_COVER;
+    }
   }
 
   togglePlay(audio: HTMLAudioElement) {
     if (this.isPlaying) {
       audio.pause();
     } else {
-      audio.play();
+      void audio.play().catch(err => {
+        this.isPlaying = false;
+        console.error('Unable to play stream:', err);
+      });
     }
     this.isPlaying = !this.isPlaying;
   }
